@@ -22,11 +22,12 @@ environmental.dat<-as.matrix(model.matrix(~-1+w+n+w*n+soil.n+soil.moist+ph+wood.
 
 # cumulative sum scaling to normalize abundances
 # Paulson et al 2013 10(12) Nature Methods
-otutab.raw<-read_csv("otu_table_raw.csv")
-otu.mr<-newMRexperiment(t(otutab))
-p = cumNormStat(otu.mr)
-otu.table<-ceiling(t(MRcounts(otu.mr,norm=TRUE,log=F)))
-
+# NOTE: this is not needed with the normalized data!
+# otutab.raw<-read_csv("otu_table_raw.csv")
+# otu.mr<-newMRexperiment(t(otutab))
+# p = cumNormStat(otu.mr)
+# otu.table<-ceiling(t(MRcounts(otu.mr,norm=TRUE,log=F)))
+# 
 
 # or read in cleaned data
 out.table<-read_csv("OTU_normalized.csv")
