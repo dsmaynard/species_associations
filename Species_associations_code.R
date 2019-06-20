@@ -12,13 +12,12 @@
 # Contact: Daniel Maynard, dmaynard@uchicago.edu
 #
 ####################################################################
-
+library(tidyverse)
+library(boral)
 
 # read in environmental data
 data<-read_csv("environmental_data.csv")
 
-# select environmental variables for boral
-environmental.dat<-as.matrix(model.matrix(~-1+w+n+w*n+soil.n+soil.moist+ph+wood.perc.moist+wood.perc.n,data=data))
 
 # cumulative sum scaling to normalize abundances
 # Paulson et al 2013 10(12) Nature Methods
@@ -29,15 +28,23 @@ environmental.dat<-as.matrix(model.matrix(~-1+w+n+w*n+soil.n+soil.moist+ph+wood.
 # otu.table<-ceiling(t(MRcounts(otu.mr,norm=TRUE,log=F)))
 # 
 
-# or read in cleaned data
-out.table<-read_csv("OTU_normalized.csv")
+# or read in cleaned OTU data and left join by sequence.id
+comb_dat <- read_csv("OTU_normalized.csv") %>% left_join(data)
+
+
+# select environmental variables for boral
+edat<-as.matrix(model.matrix(~-1+w+n+w*n+soil.n+soil.moist+soil.ph+wood.perc.moist+wood.perc.n,data=comb_dat)) %>% data.frame()
+
+
+# strip out the otu table
+otu <- comb_dat %>% select((1:ncol(.))[grepl("OTU",names(.))]) %>% data.frame() 
+
 
 ################################ boral analysis ##############################################################
 
-fit.n1<- boral(y = otu.table, X=environmental.dat,num.lv =4,  family = "negative.binomial",row.eff="random",
+fit.n1<- boral(y = otu, X=edat, num.lv =4, family = "negative.binomial",row.eff="random",
 			mcmc.control = list(n.burnin = 10000, n.iteration = 100000, n.thin = 30, save.model = TRUE,calc.ics = F,
 								prior.control = list(hypparams = c(100, 20, 100, 20))))
-
 
 ### get correlations
 rcor<-get.residual.cor(use.fit)
