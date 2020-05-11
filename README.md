@@ -2,7 +2,7 @@
 
 ---
 
-**_Ecology_, 2018, 99(4):801-811**
+### **_Ecology_, 2018, 99(4):801-811**
 
 **Daniel S. Maynard, Kristofer R. Covey, Thomas W. Crowther, Noah W. Sokol, Eric W. Morrison, Serita D. Frey, Linda T. A. van Diepen, Mark A. Bradford**
 
